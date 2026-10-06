@@ -1,5 +1,5 @@
 [README.md](https://github.com/user-attachments/files/33063700/README.md)
-# 📦 Vendor Performance Analytics: End-to-End Project
+#  Vendor Performance Analytics: End-to-End Project
 
 ![Python](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)
 ![Pandas](https://img.shields.io/badge/Pandas-NumPy-150458?logo=pandas&logoColor=white)
@@ -13,7 +13,7 @@
 
 ---
 
-## 📑 Table of Contents
+##  Table of Contents
 1. [Business Problem & Objectives](#-business-problem--objectives)
 2. [Dataset](#-dataset)
 3. [Tech Stack](#-tech-stack)
@@ -28,7 +28,7 @@
 
 ---
 
-## 🎯 Business Problem & Objectives
+##  Business Problem & Objectives
 
 A retail distributor buys from many vendors and sells thousands of brands across stores, but purchase, sales, inventory and invoice data sit in six separate files. That makes it hard to answer basic procurement questions:
 
@@ -49,7 +49,7 @@ A retail distributor buys from many vendors and sells thousands of brands across
 
 ---
 
-## 🗂 Dataset
+##  Dataset
 
 Six CSV files, loaded into SQLite tables of the same name:
 
@@ -67,7 +67,7 @@ Six CSV files, loaded into SQLite tables of the same name:
 
 ---
 
-## 🛠 Tech Stack
+##  Tech Stack
 
 | Layer | Tools |
 |-------|-------|
@@ -81,18 +81,18 @@ Six CSV files, loaded into SQLite tables of the same name:
 
 ---
 
-## ⚙️ Project Pipeline
+##  Project Pipeline
 
 The whole workflow lives in [`project.ipynb`](project.ipynb), organized in five sections.
 
-### 1️⃣ Setup & Ingestion
+###  Setup & Ingestion
 - Scans the data directory and loads **every CSV** into SQLite automatically.
 - **Chunked reads (100,000 rows)** with `pandas` and `to_sql(...)` keep memory low. The 12.8M-row `sales` file loads without crashing.
 - **Encoding fallback:** `latin1` → `utf-8` → `cp1252`.
 - **Error handling and logging** to console and `ingestion_db.log`; one failed file never stops the rest.
 - Full ingestion of all six files took about **5.4 minutes**.
 
-### 2️⃣ SQL Optimization
+###  SQL Optimization
 Indexes on the join and group-by keys, followed by `ANALYZE` to refresh query-planner statistics:
 
 ```sql
@@ -102,17 +102,17 @@ CREATE INDEX IF NOT EXISTS idx_invoice_vendor         ON vendor_invoice (VendorN
 CREATE INDEX IF NOT EXISTS idx_prices_brand           ON purchase_prices (Brand);
 ```
 
-### 3️⃣ Database Verification
+###  Database Verification
 Table listing from `sqlite_master`, row counts, `PRAGMA table_info` schemas and sample rows for every table.
 
-### 4️⃣ Exploratory Data Analysis (SQL + pandas)
+###  Exploratory Data Analysis (SQL + pandas)
 - **Data quality:** memory-safe, per-column NULL checks across all tables.
 - **Vendor performance:** top 10 vendors by purchase spend, purchase concentration, delivery lead times (PO date → receiving date) and freight as a percentage of invoice value.
 - **Purchases vs. sales:** brand-level gross margin (top and loss-making brands) and the monthly sales trend.
 - **Inventory turnover:** begin vs. end inventory value per brand and turnover = COGS ÷ average inventory (COGS approximated by purchase dollars).
 - **Top performers:** top products, vendors and stores by sales.
 
-### 5️⃣ Feature Engineering: `vendor_sales_summary`
+### 5️ Feature Engineering: `vendor_sales_summary`
 A CTE query joins purchases, purchase prices, sales and freight into **one row per vendor-brand**, then Python adds the KPIs below. The result is saved back to SQLite as `vendor_sales_summary` and exported to `vendor_sales_summary.csv` for Power BI.
 
 Further analysis on the summary table:
@@ -124,7 +124,7 @@ Further analysis on the summary table:
 
 ---
 
-## 📐 Engineered KPIs
+##  Engineered KPIs
 
 | KPI | Formula |
 |-----|---------|
@@ -136,9 +136,9 @@ Further analysis on the summary table:
 
 ---
 
-## 💡 Key Business Insights
+##  Key Business Insights
 
-> ⚠️ **Fill in the bracketed values from your notebook outputs before publishing.** The "Where to find it" column tells you which cell prints each number.
+>  **Fill in the bracketed values from your notebook outputs before publishing.** The "Where to find it" column tells you which cell prints each number.
 
 | Insight | Result | Where to find it | Recommended action |
 |---------|--------|------------------|--------------------|
@@ -154,7 +154,7 @@ Further analysis on the summary table:
 
 ---
 
-## 📊 Power BI Dashboard
+##  Power BI Dashboard
 
 The notebook exports `vendor_sales_summary.csv`, which is the single data source for the dashboard.
 
@@ -178,7 +178,7 @@ Unsold Inventory = SUM(vendor_sales_summary[UnsoldInventoryValue])
 
 ---
 
-## 📁 Repository Structure
+##  Repository Structure
 
 ```
 vendor-performance-analytics/
@@ -198,7 +198,7 @@ vendor_sales_summary.csv     # export for Power BI
 
 ---
 
-## 🚀 How to Run
+##  How to Run
 
 **1. Clone the repo**
 ```bash
@@ -229,7 +229,7 @@ pd.read_sql("SELECT * FROM vendor_sales_summary ORDER BY GrossProfit DESC LIMIT 
 
 ---
 
-## 🔮 Future Improvements
+## Future Improvements
 
 - Incremental loads instead of `if_exists="replace"`
 - Demand forecasting (Prophet or SARIMA) on monthly sales
@@ -239,9 +239,8 @@ pd.read_sql("SELECT * FROM vendor_sales_summary ORDER BY GrossProfit DESC LIMIT 
 
 ---
 
-## 👤 Author
+##  Author
 
 **Atharva Lambde**
-📧 atharvalambde@gmail.com · 🐙 [GitHub](https://github.com/atharvagit22)
-
-⭐ If you found this project useful, please star the repository.
+📧 atharvalambde@gmail.com ·  [GitHub](https://github.com/atharvagit22)
+ If you found this project useful, please star the repository.
